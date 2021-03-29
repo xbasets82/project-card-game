@@ -3,36 +3,45 @@ const PokerSuits = ["Clubs", "Diamonds", "Hearts", "Spades"];
 import Card from "./card.js";
 import Suit from "./suit.js";
 import Deck from "./deck.js";
+let cardValues = new Map();
+
 
 const createCard = (suit, value, isJoker) => {
-  let card = new Card(suit, value, isJoker);
+  let card = new Card(suit, value, isJoker,cardValues.get(value));
   card.showValue();
   return card;
 };
 
-const createSuitCards = (suit) => {
-  let suitCards = [];
-  for (let i = 1; i <= 14; i++) {
-    suitCards.push(createCard(suit, i, false));
-  }
-  return new Suit(suitCards);
-};
+const createCards = (suit) => {
+    let suitCards = [];
+    for (let i = 1; i <= 13; i++) {
+      suitCards.push(createCard(suit, i, false));
+    }
+    return suitCards;
+  };
 
 export const createDeck = () => {
-  let deckSuits = [];
+    fillCardValuesMap();
+  let deckCards = [];
   for (let i = 0; i < PokerSuits.length; i++) {
-    deckSuits.push(createSuitCards(PokerSuits[i]));
+    deckCards.push(...createCards(PokerSuits[i]));
   }
-  let deck = new Deck(deckSuits);
+  let deck = new Deck(deckCards);
   console.log(deck);
 };
 
-export const createDeckBySuits = () => {
-    let deckSuits = [];
-    for (let i = 0; i < PokerSuits.length; i++) {
-      deckSuits.push(createSuitCards(PokerSuits[i]));
-    }
-    let deck = new Deck(deckSuits);
-    console.log(deck);
-  }; 
-
+const fillCardValuesMap=()=>{
+cardValues.set(1,"Ace");
+cardValues.set(2,"2");
+cardValues.set(3,"3");
+cardValues.set(4,"4");
+cardValues.set(5,"5");
+cardValues.set(6,"6");
+cardValues.set(7,"7");
+cardValues.set(8,"8");
+cardValues.set(9,"9");
+cardValues.set(10,"10");
+cardValues.set(11,"Jack");
+cardValues.set(12,"Queen");
+cardValues.set(13,"King");
+}

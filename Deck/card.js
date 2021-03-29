@@ -1,10 +1,12 @@
 class Card {
-    constructor(suit,value,isJoker){
+    constructor(suit,numValue,isJoker,litValue){
         this.suit = suit;
-        this.value = value;
+        this.numValue = numValue;
+        this.litValue = litValue;
         this.isJoker = isJoker;
     }
-     showValue= ()=> console.log(`${this.value} of ${this.suit}`);
+     showValue= ()=> console.log(`${this.litValue} of ${this.suit}`);    
 }
+
 
 export default Card;
