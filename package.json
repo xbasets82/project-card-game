@@ -1,0 +1,5 @@
+{
+    "name":"game",
+    "main":"main.js",
+    "type":"module"
+}

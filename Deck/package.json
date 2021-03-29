@@ -1,0 +1,5 @@
+{
+    "name": "deck",
+    "main": "mainDeck.mjs",
+    "type": "module"
+}
