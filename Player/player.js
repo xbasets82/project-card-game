@@ -1,8 +1,9 @@
 class Player {
-  constructor(name, order, color) {
+  constructor(name, order, color, hand) {
     this.name = name;
     this.order = order;
     this.color = color;
+    this.hand = hand;
   }
   identify = () =>
     console.log(

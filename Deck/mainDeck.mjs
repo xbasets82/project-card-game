@@ -24,6 +24,7 @@ export const createDeck = () => {
     deckCards.push(...createCards(PokerSuits[i]));
   }
   let deck = new Deck(deckCards);
+  return deck;
 };
 
 const fillCardValuesMap = () => {
