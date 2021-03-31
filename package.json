@@ -1,5 +1,9 @@
 {
-    "name":"game",
-    "main":"main.js",
-    "type":"module"
+    "name": "game",
+    "main": "main.js",
+    "type": "module",
+    "dependencies": {
+        "commonjs": "^0.0.1",
+        "fs": "^0.0.1-security"
+    }
 }

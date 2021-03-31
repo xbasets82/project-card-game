@@ -1,0 +1,24 @@
+{
+    "players":[
+        {
+            "name":"Xavi",
+            "color":"red",
+            "order":1
+        },
+        {
+            "name":"Irene",
+            "color":"Blue",
+            "order":2
+        },
+        {
+            "name":"Adrià",
+            "color":"yellow",
+            "order":3
+        },
+        {
+            "name":"Joan",
+            "color":"green",
+            "order":4
+        }
+    ]
+}
