@@ -12,7 +12,7 @@ const createCard = (suit, value, isJoker) =>
 const createCards = (suit) => {
   let suitCards = [];
   for (let i = 1; i <= 13; i++) {
-    suitCards.push(createCard(suit, i, false));
+    suitCards.push(createCard(suit, i, false, true));
   }
   return suitCards;
 };

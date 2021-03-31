@@ -1,5 +1,5 @@
 import { createDeck } from "./Deck/mainDeck.mjs";
-import { createPlayer } from "./Player/mainPlayer.mjs";
+import { createPlayer, updateHand } from "./Player/mainPlayer.mjs";
 import { giveInitialCards, getGameRules, getGame } from "./Game/mainGame.mjs";
 import { getPlayers } from "./configure.js";
 
@@ -8,16 +8,16 @@ let rules;
 let game;
 let players = [];
 
-
 const getInitialCards = () => {
   for (let i = 0; i < players.length; i++) {
-    players[i].hand = giveInitialCards(game, rules);
-    console.log(players[i]);
+    players[i].hand = updateHand(giveInitialCards(game));
+    console.log(`${players[i].name} cards:`);  
+    players[i].hand.printHand();
   }
 };
-const getRules = (game) => (rules = getGameRules(game));
+const getRules = () => (game.rules = getGameRules(game));
 
-const getNewGame = (deck) => (game = getGame(deck));
+const getNewGame = () => (game = getGame(deck));
 
 const createPlayers = (num) => {
   let playersInfo = getPlayers(num);
@@ -35,8 +35,11 @@ const createPlayers = (num) => {
 function initializeGame(hasJokers, deckType) {
   deck = createDeck();
   createPlayers(3);
-  getNewGame(deck);
-  getRules("game");
+  getNewGame();
+  getRules();
   getInitialCards();
 }
+
 initializeGame();
+
+// document.addEventListener("DOMContentLoaded",initializeGame());

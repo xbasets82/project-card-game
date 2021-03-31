@@ -1,7 +1,11 @@
 import Game from "./game.js";
 import Rules from "./rules.js";
 
-export const giveInitialCards=(game, rules) => game.giveInitialCards(rules.initialNumberCards);
+export const giveInitialCards=(game) => game.giveInitialCards();
+
+export const giveCard= (isVisible)=> "";
+
+export const removeCard=()=>"";
 
 export const getGameRules = (game) => new Rules(2);
 
