@@ -13,6 +13,11 @@ export const createCrupier = (name,color,order,isCrupier) =>{
   return crupier;
 }
 
+export const newHand = (cards) =>{
+  let hand = new Hand(cards);
+  return hand;
+}
+
 export const updateHand = (cards) =>{
   let hand = new Hand(cards);
   return hand;

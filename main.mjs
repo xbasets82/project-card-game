@@ -3,34 +3,82 @@ import {
   createPlayer,
   updateHand,
   createCrupier,
+  newHand,
 } from "./Player/mainPlayer.mjs";
-import { giveInitialCards,giveCrupierInitialCards, getGameRules, getGame } from "./Game/mainGame.mjs";
+import {
+  giveInitialCards,
+  giveCrupierInitialCards,
+  getGameRules,
+  getGame,
+  askForOptions,
+  excuteAction,
+} from "./Game/mainGame.mjs";
+
 import { getPlayers } from "./configure.js";
 
-
 let stdin = process.openStdin();
+process.stdin.setRawMode(true);
+process.stdin.resume();
+stdin.setEncoding("utf8");
+
 let deck;
 let game;
 let players = [];
 let crupier;
 
-const gameProcess = () => {
-
-  
+const playerTurn = () => {
+  players[game.playerTurn].hand.printHand();
+  askForOptions();
+  process.stdin.once("data", function (key) {
+    // console.log(`${key}`);
+    let currentTurn = game.playerTurn;
+    let result = excuteAction(key, game)
+    if(currentTurn === game.playerTurn){
+      players[game.playerTurn].hand.cards.push(result);      
+      gameProcess(false);
+    }else if(game.playerTurn >= players.length) {      
+      console.log(`El jugador ${players[currentTurn].name} se planta`);
+      players[currentTurn].hand.printHand();
+      gameProcess(true);
+    }else{
+      console.log(`El jugador ${players[currentTurn].name} se planta`);
+      players[currentTurn].hand.printHand();
+      gameProcess(false);
+    }
+    
+  });
 };
 
-const getPlayersCards =()=> {
+const crupierTurn = () =>{
+  crupier.hand.printHand();
+  if (crupier.hand.getHandValue() <= 16){
+    crupier.hand.cards.push(game.giveCard(game,true));
+    crupier.hand.printHand();
+    crupierTurn();
+  }else{
+    console.log("crupier hand");
+    crupier.hand.printHand();
+  }
+
+}
+
+
+const gameProcess = (isCrupier) => {
+  isCrupier === false ?  playerTurn() : crupierTurn();
+};
+
+const getPlayersCards = () => {
   for (let i = 0; i < players.length; i++) {
-    players[i].hand = updateHand(giveInitialCards(game));
+    players[i].hand = newHand(giveInitialCards(game));
     console.log(`${players[i].name} cards:`);
     players[i].hand.printHand();
   }
 };
-const getCrupierCards=()=>{
-  crupier.hand = updateHand(giveCrupierInitialCards(game));
+const getCrupierCards = () => {
+  crupier.hand = newHand(giveCrupierInitialCards(game));
   console.log(`${crupier.name} cards:`);
   crupier.hand.printHand();
-}
+};
 const getInitialCards = () => {
   getPlayersCards();
   getCrupierCards();
@@ -62,21 +110,9 @@ function initializeGame(hasJokers, deckType) {
   getNewGame();
   getRules();
   getInitialCards();
-  process.stdin.setRawMode(true);
-  process.stdin.resume();
-  stdin.setEncoding("utf8");
-  stdin.on("data", function (key) {
-    // ctrl-c ( end of text )
-    if (key === "\u0003") {
-      process.exit();
-    }
-    // write the key to stdout all normal like
-    //process.stdout.write( key );
-    console.log("SSS");
-  });
 }
 
 initializeGame();
-gameProcess();
+gameProcess(false);
 
 // document.addEventListener("DOMContentLoaded",initializeGame());
