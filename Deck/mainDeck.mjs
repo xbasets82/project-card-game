@@ -6,8 +6,8 @@ import Deck from "./deck.js";
 
 let cardValues = new Map();
 
-const createCard = (suit, value, isJoker) =>
-  new Card(suit, value, isJoker, cardValues.get(value));
+const createCard = (suit, value, isJoker, isVisible) =>
+  new Card(suit, value, isJoker, cardValues.get(value),isVisible);
 
 const createCards = (suit) => {
   let suitCards = [];

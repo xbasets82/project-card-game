@@ -6,7 +6,7 @@ class Card {
         this.isJoker = isJoker;
         this.privateIsVisible = isVisible;
     }
-     showValue= ()=> console.log(`${this.litValue} of ${this.suit}`);    
+     showValue= ()=> console.log(`${this.litValue} of ${this.suit} visible ${this.privateIsVisible}`);    
      get isVisible() {return this.privateIsVisible}
      set isVisible(newIsVisible) {this.privateIsVisible = newIsVisible}
 

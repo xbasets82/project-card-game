@@ -1,22 +1,22 @@
 {
     "players":[
         {
-            "name":"Xavi",
+            "name":"Player1",
             "color":"red",
             "order":1
         },
         {
-            "name":"Irene",
+            "name":"Player2",
             "color":"Blue",
             "order":2
         },
         {
-            "name":"Adrià",
+            "name":"Player3",
             "color":"yellow",
             "order":3
         },
         {
-            "name":"Joan",
+            "name":"Player4",
             "color":"green",
             "order":4
         }
