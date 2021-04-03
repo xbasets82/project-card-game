@@ -9,6 +9,7 @@ class Player {
     console.log(
       `${this.privateName} is player number ${this.privateOrder}, color ${this.privateColor}`
     );
+  showName = () =>  console.log(`${this.privateName} :`);
    get name() {return this.privateName}
    set name(newName) {this.privateName = newName} 
    get order() {return this.privateOrder}
