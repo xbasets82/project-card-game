@@ -1,5 +1,5 @@
 {
-    "name":"game",
-    "main":"mainGame.mjs",
-    "type":"module"
+    "name": "game",
+    "main": "mainGame.mjs",
+    "type": "module"
 }

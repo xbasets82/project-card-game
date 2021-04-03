@@ -7,7 +7,7 @@ class Card {
         this.privateIsVisible = isVisible;
         this.gameValue= gameValue;
     }
-     showValue= ()=> console.log(`${this.litValue} of ${this.suit} visible ${this.privateIsVisible}`);    
+     showValue= ()=> console.log(`${this.litValue} of ${this.suit}`);    
      get isVisible() {return this.privateIsVisible}
      set isVisible(newIsVisible) {this.privateIsVisible = newIsVisible}
 

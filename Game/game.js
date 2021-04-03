@@ -26,12 +26,15 @@ class Game {
   giveCard(isVisible) {
     let card;
     let index = Math.floor(Math.random() * this.deckCards.length);
-    card=this.deckCards[index];
+    card = this.deckCards[index];
     this.deckCards.splice(index, 1);
     return card;
   }
-  pass(){
-      this.privatePlayerTurn = this.privatePlayerTurn + 1;
+  pass() {
+    this.privatePlayerTurn = this.privatePlayerTurn + 1;
+  }
+  nextPlayerTurn() {
+    this.privatePlayerTurn = this.privatePlayerTurn + 1;
   }
   get rules() {
     return this.privateRules;
