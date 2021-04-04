@@ -9,6 +9,7 @@ process.stdin.resume();
 const actions = [
   { action: "C", function: (game) => game.giveCard(true) },
   { action: "P", function: (game) => game.pass() },
+  { action: "X", function: () => process.exit(1) },
 ];
 
 let game;
@@ -22,18 +23,57 @@ const crupierTurn = () => {
     crupier.hand.printHand();
     crupierTurn();
   } else {
-    console.log("crupier hand:");
-    crupier.hand.printHand();
-    compareResults();
+    if (crupier.hand.hasHandSpecialValues()) {
+      replaceCardValue(crupier);
+      crupierTurn();
+    } else {
+      console.log("crupier hand:");
+      crupier.hand.printHand();
+      compareResults();
+    }
+  }
+};
+
+const setNextTurn = () => {
+  if (game.playerTurn === players.length - 1) {
+    processToDo(true);
+  } else {
+    game.nextPlayerTurn();
+    processToDo(false);
+  }
+};
+const replaceCardValue = (player) => {
+  for (let i = 0; i < player.hand.cards.length; i++) {
+    if (
+      player.hand.cards[i].gameAlternativeValue !== undefined &&
+      player.hand.cards[i].gameAlternativeValue < player.hand.cards[i].gameValue
+    ) {
+      player.hand.cards[i].gameValue =
+        player.hand.cards[i].gameAlternativeValue;
+      player.hand.cards[i].gameAlternativeValue = undefined;
+      break;
+    }
+  }
+};
+const reviewHandValue = (currentTurn) => {
+  replaceCardValue(players[currentTurn]);
+  validateHand(currentTurn);
+};
+
+const controlSpecialCases = (currentTurn) => {
+  if (players[currentTurn].hand.hasHandSpecialValues()) {
+    reviewHandValue(currentTurn);
+  } else {
+    moreThan21(currentTurn);
+    setNextTurn(currentTurn);
   }
 };
 
 const validateHand = (currentTurn) => {
   switch (true) {
-    case players[game.playerTurn].hand.getHandValue() > 21:
-      moreThan21(currentTurn);
-      game.nextPlayerTurn();
-      processToDo(false);
+    case players[currentTurn].hand.getHandValue() > 21:
+      controlSpecialCases(currentTurn);
+      break;
     default:
       processToDo(false);
       break;
@@ -52,15 +92,33 @@ const validateTurn = (currentTurn, result) => {
     processToDo(false);
   }
 };
-const playerTurn = () => {
-  console.log(`${players[game.playerTurn].name} : `);
-  players[game.playerTurn].hand.printHand();
+
+const findAction = (action) => {
+  return actions.find((Element) => Element.action === action);
+};
+const excuteAction = (actionToExecute, game) => {
+  return actionToExecute.function(game);
+};
+
+const keyControl = () => {
   askForOptions();
   process.stdin.once("data", function (key) {
     let currentTurn = game.playerTurn;
-    let result = excuteAction(key, game);
-    validateTurn(currentTurn,result);
+    let action = findAction(key);
+    if (action !== undefined) {
+      let result = excuteAction(action, game);
+      validateTurn(currentTurn, result);
+    } else {
+      console.log(`Acción no válida`);
+      keyControl();
+    }
   });
+};
+
+const playerTurn = () => {
+  console.log(`${players[game.playerTurn].name} : `);
+  players[game.playerTurn].hand.printHand();
+  keyControl();
 };
 
 const moreThan21 = (currentTurn) => {
@@ -70,7 +128,6 @@ const moreThan21 = (currentTurn) => {
 
 const noMoreCards = (currentTurn) => {
   console.log(`El jugador ${players[currentTurn].name} se planta`);
-  // players[currentTurn].hand.printHand();
 };
 
 const processToDo = (isCrupier) =>
@@ -78,10 +135,12 @@ const processToDo = (isCrupier) =>
 
 const askForOptions = () =>
   console.log(
-    `${players[game.playerTurn].name}: Elegir opcion : Carta = C, Plantarse = P`
+    `${
+      players[game.playerTurn].name
+    }: Elegir opcion : Carta = C, Plantarse = P, Salir del Juego = X`
   );
 
-export const compareResults = () => {
+const compareResults = () => {
   console.log(`puntuación Crupier : ${crupier.hand.getHandValue()}`);
   let crupierPoints = crupier.hand.getHandValue();
   for (let i = 0; i < players.length; i++) {
@@ -95,16 +154,13 @@ export const compareResults = () => {
       (crupierPoints > 21 && playerPoints <= 21)
     ) {
       console.log("WIN");
+    } else if (playerPoints === crupierPoints && playerPoints <= 21) {
+      console.log("DEUCE");
     } else {
       console.log("LOSE");
     }
   }
   process.exit(1);
-};
-
-export const excuteAction = (action, game) => {
-  let actionToExecute = actions.find((Element) => Element.action === action);
-  return actionToExecute.function(game);
 };
 
 export const gameProcess = (
@@ -116,7 +172,7 @@ export const gameProcess = (
   game = actualGame;
   crupier = gameCrupier;
   players = gamePlayers;
-  console.log("--------------------");
+  console.log("-------------------------");
   isCrupier === false ? playerTurn() : crupierTurn();
 };
 

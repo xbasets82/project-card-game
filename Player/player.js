@@ -3,7 +3,7 @@ class Player {
     this.privateName = name;
     this.privateOrder = order;
     this.privateColor = color;
-    this.privateHand ;
+    
   }
   identify = () =>
     console.log(
@@ -15,9 +15,7 @@ class Player {
    get order() {return this.privateOrder}
    set order(newOrder) {this.privateOrder = newOrder} 
    get color() {return this.privateColor}
-   set color(newColor) {this.privateColor = newColor}
-   get hand() {return this.privateHand}
-   set hand(newHand) {this.privateHand = newHand}
+   set color(newColor) {this.privateColor = newColor}   
 }
 
 export default Player;

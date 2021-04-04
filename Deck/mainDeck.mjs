@@ -6,9 +6,18 @@ import Deck from "./deck.js";
 
 let cardValues = new Map();
 let cardGameValues = new Map();
+let cardGameAlternativeValues = new Map();
 
 const createCard = (suit, value, isJoker, isVisible) =>
-  new Card(suit, value, isJoker, cardValues.get(value),isVisible, cardGameValues.get(value));
+  new Card(
+    suit,
+    value,
+    isJoker,
+    cardValues.get(value),
+    isVisible,
+    cardGameValues.get(value),
+    cardGameAlternativeValues.get(value)
+  );
 
 const createCards = (suit) => {
   let suitCards = [];
@@ -21,6 +30,7 @@ const createCards = (suit) => {
 export const createDeck = () => {
   fillCardValuesMap();
   fillCardGameValuesMap();
+  fillCardGameAlteraniveValuesMap();
   let deckCards = [];
   for (let i = 0; i < PokerSuits.length; i++) {
     deckCards.push(...createCards(PokerSuits[i]));
@@ -55,8 +65,12 @@ const fillCardGameValuesMap = () => {
   cardGameValues.set(7, 7);
   cardGameValues.set(8, 8);
   cardGameValues.set(9, 9);
-  cardGameValues.set(10,10);
-  cardGameValues.set(11,10);
-  cardGameValues.set(12,10);
-  cardGameValues.set(13,10);
+  cardGameValues.set(10, 10);
+  cardGameValues.set(11, 10);
+  cardGameValues.set(12, 10);
+  cardGameValues.set(13, 10);
+};
+
+const fillCardGameAlteraniveValuesMap = () => {
+  cardGameAlternativeValues.set(1, 1);
 };
