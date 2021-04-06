@@ -16,33 +16,33 @@ let game;
 let players = [];
 let crupier;
 
-const crupierTurn = () => {
-  crupier.hand.printHand();
+// export const crupierTurn = (crupier, game) => {
+//   crupier.hand.printHand();
+//   if (crupier.hand.getHandValue() <= 16) {
+//     crupier.hand.cards.push(game.giveCard(game, true));
+//     crupier.hand.printHand();
+//     crupierTurn(crupier, game);
+//   } else {
+//     if (crupier.hand.hasHandSpecialValues()) {
+//       replaceCardValue(crupier);
+//       crupierTurn(crupier, game);
+//     } else {
+//       console.log("crupier hand:");
+//       crupier.hand.printHand();
+//       compareResults();
+//     }
+//   }
+// };
+
+export const validateTopCrupier = (crupier) => {
   if (crupier.hand.getHandValue() <= 16) {
-    crupier.hand.cards.push(game.giveCard(game, true));
-    crupier.hand.printHand();
-    crupierTurn();
+    return true;
   } else {
-    if (crupier.hand.hasHandSpecialValues()) {
-      replaceCardValue(crupier);
-      crupierTurn();
-    } else {
-      console.log("crupier hand:");
-      crupier.hand.printHand();
-      compareResults();
-    }
+    return false;
   }
 };
 
-const setNextTurn = () => {
-  if (game.playerTurn === players.length - 1) {
-    processToDo(true);
-  } else {
-    game.nextPlayerTurn();
-    processToDo(false);
-  }
-};
-const replaceCardValue = (player) => {
+export const replaceCardValue = (player) => {
   for (let i = 0; i < player.hand.cards.length; i++) {
     if (
       player.hand.cards[i].gameAlternativeValue !== undefined &&
@@ -55,92 +55,55 @@ const replaceCardValue = (player) => {
     }
   }
 };
-const reviewHandValue = (currentTurn) => {
+
+const reviewHandValue = (currentTurn, players) => {
   replaceCardValue(players[currentTurn]);
-  validateHand(currentTurn);
+  return validateHand(currentTurn, players);
 };
 
-const controlSpecialCases = (currentTurn) => {
+export const controlSpecialCases = (currentTurn, players) => {
   if (players[currentTurn].hand.hasHandSpecialValues()) {
-    reviewHandValue(currentTurn);
+    return reviewHandValue(currentTurn, players);
   } else {
-    moreThan21(currentTurn);
-    setNextTurn(currentTurn);
+    return false;
   }
 };
 
-const validateHand = (currentTurn) => {
+
+export const validateHand = (currentTurn, players) => {
   switch (true) {
     case players[currentTurn].hand.getHandValue() > 21:
-      controlSpecialCases(currentTurn);
+      return false;
+      // controlSpecialCases(currentTurn);
       break;
     default:
-      processToDo(false);
+      return true;
       break;
   }
 };
 
-const validateTurn = (currentTurn, result) => {
-  if (currentTurn === game.playerTurn) {
-    players[game.playerTurn].hand.cards.push(result);
-    validateHand(currentTurn);
-  } else if (game.playerTurn >= players.length) {
-    noMoreCards(currentTurn);
-    processToDo(true);
-  } else {
-    noMoreCards(currentTurn);
-    processToDo(false);
-  }
-};
 
-const findAction = (action) => {
+
+export const findAction = (action) => {
   return actions.find((Element) => Element.action === action);
 };
-const excuteAction = (actionToExecute, game) => {
+export const excuteAction = (actionToExecute, game) => {
   return actionToExecute.function(game);
 };
 
-const keyControl = () => {
-  askForOptions();
-  process.stdin.once("data", function (key) {
-    let currentTurn = game.playerTurn;
-    let action = findAction(key);
-    if (action !== undefined) {
-      let result = excuteAction(action, game);
-      validateTurn(currentTurn, result);
-    } else {
-      console.log(`Acción no válida`);
-      keyControl();
-    }
-  });
-};
 
-const playerTurn = () => {
-  console.log(`${players[game.playerTurn].name} : `);
-  players[game.playerTurn].hand.printHand();
-  keyControl();
-};
-
-const moreThan21 = (currentTurn) => {
-  console.log(`El jugador ${players[currentTurn].name} se ha pasado`);
-  players[currentTurn].hand.printHand();
-};
-
-const noMoreCards = (currentTurn) => {
-  console.log(`El jugador ${players[currentTurn].name} se planta`);
-};
 
 const processToDo = (isCrupier) =>
   isCrupier === false ? playerTurn() : crupierTurn();
 
-const askForOptions = () =>
-  console.log(
-    `${
-      players[game.playerTurn].name
-    }: Elegir opcion : Carta = C, Plantarse = P, Salir del Juego = X`
-  );
+export const askForOptions = () => [
+  { key: "C", action: "Carta" },
+  { key: "P", action: "Plantarse" },
+  { key: "X", action: "Salir del Juego" },
+];
 
-const compareResults = () => {
+
+export const compareResults = (crupier, players) => {
   console.log(`puntuación Crupier : ${crupier.hand.getHandValue()}`);
   let crupierPoints = crupier.hand.getHandValue();
   for (let i = 0; i < players.length; i++) {
