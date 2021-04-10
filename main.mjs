@@ -17,6 +17,12 @@ import {
 
 import { getPlayers } from "./configure.js";
 
+let stdin = process.openStdin();
+stdin.setEncoding("utf8");
+process.stdin.setRawMode(true);
+process.stdin.resume();
+
+
 let deck;
 let game;
 let players = [];
@@ -142,6 +148,7 @@ const crupierTurn = () => {
       console.log("crupier hand:");
       crupier.hand.printHand();
       compareResults(crupier, players);
+      process.exit(1);
     }
   }
 };
